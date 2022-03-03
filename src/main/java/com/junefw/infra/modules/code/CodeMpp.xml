@@ -14,9 +14,31 @@
 					, a.ifcgName
 					, a.ifcgDelNy
 			 FROM 
-					alpha.infrCodeGroup a
+					infrCodeGroup a <!-- 여기 앞에 .alpha 를 넣으니까 404오류떳엇음 첫번째  -->
 			 WHERE 1=1
 					AND ifcgDelNy = 0
 	</select>
 
+	<insert id="insert">
+			INSERT INTO infrCodeGroup(
+				ifcgName
+				,ifcgDelNy
+			) VALUES (
+				#{ifcgName}
+				,0
+			)
+	</insert>
+	
+	<select id="selectOne" resultMap="resultMapObj">
+		select
+			a.mvcgSeq
+		    , a.mvcgName
+		    , a.mvcgDelNy
+		from
+			mvCodeGroup a
+		where 1=1
+			and mvcgDelNy = 0
+			and mvcgSeq = #{mvcgSeq}
+	</select>
+	
 </mapper>
