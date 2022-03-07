@@ -13,17 +13,26 @@ public class CodeServiceImpl implements CodeService{ // 서비스에 상속받�
 
 	@Override
 	public List<Code> selectList() throws Exception {
-			return dao.selecList();
+	
+	return dao.selecList();
 	}
 	
 	@Override
 	public int insert(Code dto) throws Exception {
+		
 		return dao.insert(dto);
 	}
 	
 	@Override
 	public Code selectOne(CodeVo vo) throws Exception {
+		
 		return dao.selectOne(vo);
 	}
 	
+	@Override
+	public int update(Code dto) throws Exception {
+		
+		return dao.update(dto);
+		
+	}
 }

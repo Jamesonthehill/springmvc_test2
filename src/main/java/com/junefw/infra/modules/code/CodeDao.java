@@ -22,4 +22,7 @@ public class CodeDao { // CodeMpp로 넘겨서 데이터를 받아오ㅓ는 역�
 	public int insert(Code dto) {return sqlSession.insert(namespace + ".insert", dto);}
 	
 	public Code selectOne(CodeVo vo) { return sqlSession.selectOne(namespace + ".selectOne", vo);}
+
+	public int update(Code dto) { return sqlSession.update(namespace + ".update", dto);
+	}
 }
