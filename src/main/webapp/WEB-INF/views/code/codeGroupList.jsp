@@ -14,9 +14,9 @@
 	<c:otherwise>
 		<c:forEach items="${list}" var="item" varStatus="status">	
 		
-		<a href="/infra/code/codeGroupView?ifcgSeq=${item.ifcgSeq}"><c:out value="${item.ifcgName}"/></a> <br>
+		<%-- <a href="/infra/code/codeGroupForm2?ifcgSeq=${item.ifcgSeq}">그룹 코드 조회</a> --%>
+		   <c:out value=" ${item.ifcgSeq}"/> | <a href="/infra/code/codeGroupForm2?ifcgSeq=${item.ifcgSeq}"><c:out value="${item.ifcgName}"/></a> | <c:out value="${item.ifcgDelNy}"/><br>
 		
 		</c:forEach>
 	</c:otherwise>
 </c:choose>	 
-
