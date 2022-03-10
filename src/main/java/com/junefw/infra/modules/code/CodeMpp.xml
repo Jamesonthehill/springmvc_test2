@@ -8,6 +8,10 @@
 
     <resultMap id="resultMapObj" type="com.junefw.infra.modules.code.Code"></resultMap> <!--  mybatis인가 이거 사용해주기 위해 쓰는거임 결과의 객체를 지칭 -->
 
+
+
+
+	<!-- infrCodeGroup  -->
 	<select id="selectList" resultMap="resultMapObj">
 			 SELECT 
 					a.ifcgSeq
@@ -42,10 +46,58 @@
 	
 	<update id="update">
 			UPDATE
-				infrCodeGroup
+				infrCodeGroup  <!-- 진짜 중요한게 테이블 이름틀리면 505 Error 불변임  -->
 			SET 
 				ifcgName = #{ifcgName}
 			WHERE 1=1
 				AND ifcgSeq = #{ifcgSeq}
 	</update>
+	
+	<!-- infrCode  -->
+	<select id="selectListCode" resultMap="resultMapObj">
+			 SELECT 
+					a.ifcdSeq
+					, a.ifcdName
+					, a.ifcdDelNy
+			 FROM 
+					infrCode a <!-- 여기 앞에 .alpha 를 넣으니까 404오류떳엇음 첫번째  -->
+			 WHERE 1=1
+					AND ifcdDelNy = 0
+	</select>
+
+	<insert id="insertCode">
+			INSERT INTO infrCode(
+				ifcdName
+				,ifcdDelNy
+				,ifcgSeq
+			) VALUES (
+				#{ifcdName}
+				,0
+				,#{ifcgSeq}
+			)
+	</insert>
+	
+	<select id="selectOneCode" resultMap="resultMapObj">
+		select
+			a.ifcdSeq
+		    , a.ifcdName
+		    , a.ifcdDelNy
+		from
+			infrCode a
+		where 1=1
+			and ifcdSeq = #{ifcdSeq}
+	</select>
+	
+	<update id="updateCode">
+			UPDATE
+				infrCode  <!-- 진짜 중요한게 테이블 이름틀리면 505 Error 불변임  -->
+			SET 
+				ifcdName = #{ifcdName}
+			WHERE 1=1
+				AND ifcdSeq = #{ifcdSeq}
+	</update>
+	
+	
+	
+	
 </mapper>
