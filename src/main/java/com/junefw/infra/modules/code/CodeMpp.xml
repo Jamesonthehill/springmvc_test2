@@ -8,21 +8,56 @@
 
     <resultMap id="resultMapObj" type="com.junefw.infra.modules.code.Code"></resultMap> <!--  mybatis인가 이거 사용해주기 위해 쓰는거임 결과의 객체를 지칭 -->
 
-
-
-
 	<!-- infrCodeGroup  -->
-	<select id="selectList" resultMap="resultMapObj">
-			 SELECT 
-					a.ifcgSeq
-					, a.ifcgName
-					, a.ifcgDelNy
-			 FROM 
-					infrCodeGroup a <!-- 여기 앞에 .alpha 를 넣으니까 404오류떳엇음 첫번째  -->
-			 WHERE 1=1
-					AND ifcgDelNy = 0
+	
+	<sql id="selectCommon">
+		 FROM  
+				infrCodeGroup a <!-- 여기 앞에 .alpha 를 넣으니까 404오류떳엇음 첫번째  --> 
+		 WHERE 1=1
+		 		AND ifcgDelNy = 0
+		 		<choose>
+					<when test="shIfcgDelNy == 1">AND ifcgDelNy = 1</when>
+					<when test="shIfcgDelNy == 0">AND ifcgDelNy = 0</when>
+				</choose>	
+			 	<if test="shIfcgName != null and !shIfcgName.equals('')"> AND ifcgName LIKE concat('%',#{shIfcgName}, '%')</if>
+				<choose>
+					<when test="shOption == 1">AND a.ifcgName LIKE concat('%',#{shValue}, '%')</when>
+					<when test="shOption == 2">AND a.ifcgNameEng LIKE concat('%',#{shValue}, '%')</when>
+				</choose>	
+	</sql>
+
+	<select id="selectOneCount" resultType="Integer">
+		SELECT
+			count(*)
+		<include refid="selectCommon" />
+
 	</select>
 
+	<select id="selectList" resultMap="resultMapObj">
+		SELECT
+			a.ifcgSeq
+			, a.ifcgName
+			, a.ifcgNameEng
+			, a.ifcgDelNy
+		<include refid="selectCommon" />
+			<!-- ORDER BY a.ifcgSeq DESC --> <!--  역순 정렬 -->
+			limit #{startRnumForMysql}, #{rowNumToShow} 
+		</select>
+	
+	<!-- <select id="selectList" resultMap="resultMapObj">
+		<include refid="Base.selectListUpperForMysql"/>
+		SELECT
+		 	*	
+		<include refid="selectCommon"/>
+			ORDER BY a.ifmmSeq DESC
+		<include refid="Base.orderByLimitForMysql"/>
+	</select>
+
+	<select id="selectOneCount" resultMap="resultMapobj">
+		SELECT COUNT(*)
+		<include refid="selectCommon"/>
+	</select> -->
+	
 	<insert id="insert">
 			INSERT INTO infrCodeGroup(
 				ifcgName
@@ -31,6 +66,9 @@
 				#{ifcgName}
 				,0
 			)
+			<selectKey resultType="String" keyProperty="ifcgSeq" order="AFTER">
+			SELECT last_insert_id()	
+			</selectKey>
 	</insert>
 	
 	<select id="selectOne" resultMap="resultMapObj">
@@ -52,7 +90,16 @@
 			WHERE 1=1
 				AND ifcgSeq = #{ifcgSeq}
 	</update>
+
 	
+	<update id="updateDelete">
+			UPDATE infrCodeGroup SET ifcgDelNy = 1 WHERE 1=1 AND ifcgSeq = #{ifcgSeq}
+	</update>
+	
+	
+	<delete id="delete">
+			DELETE FROM infrCodeGroup WHERE 1=1 AND ifcgSeq = #{ifcgSeq}
+	</delete>
 	<!-- infrCode  -->
 	<select id="selectListCode" resultMap="resultMapObj">
 			 SELECT 
@@ -63,6 +110,7 @@
 					infrCode a <!-- 여기 앞에 .alpha 를 넣으니까 404오류떳엇음 첫번째  -->
 			 WHERE 1=1
 					AND ifcdDelNy = 0
+					 <if test="shIfcgSeq != null and !shIfcgSeq.equals('')"> AND ifcgSeq =(#{shIfcgSeq})</if>
 	</select>
 
 	<insert id="insertCode">
@@ -86,6 +134,7 @@
 			infrCode a
 		where 1=1
 			and ifcdSeq = #{ifcdSeq}
+			
 	</select>
 	
 	<update id="updateCode">
@@ -96,8 +145,5 @@
 			WHERE 1=1
 				AND ifcdSeq = #{ifcdSeq}
 	</update>
-	
-	
-	
 	
 </mapper>
