@@ -8,13 +8,31 @@
 
     <resultMap id="resultMapObj" type="com.junefw.infra.modules.member.Member"></resultMap> <!--  mybatis인가 이거 사용해주기 위해 쓰는거임 -->
 
+
+
+
+
+	<sql id="selectCommon">
+		 FROM  
+				infrMember a <!-- 여기 앞에 .alpha 를 넣으니까 404오류떳엇음 첫번째  --> 
+		 WHERE 1=1
+		 		AND ifmmDelNy = 0
+	</sql>
+
+	<select id="selectOneCount" resultType="Integer">
+		SELECT
+			count(*)
+		<include refid="selectCommon" />
+
+	</select>
+
 	<select id="selectList" resultMap="resultMapObj">
 			select
 				ifmmSeq
 				, ifmmId
 				, ifmmName
-			from
-				infrMember
+			<include refid="selectCommon"/>
+				limit #{startRnumForMysql}, #{rowNumToShow}
 	</select>
 	
 	<insert id="insert">
@@ -29,5 +47,32 @@
 			) 
 	</insert>
 	
+		<select id="selectOne" resultMap="resultMapObj">
+		select
+			a.ifmmSeq
+		    , a.ifmmId
+		    , a.ifmmName
+		from
+			infrMember a
+		where 1=1
+			and ifmmSeq = #{ifmmSeq}
+	</select>
+	
+	<update id="update">
+			UPDATE
+				infrMember  <!-- 진짜 중요한게 테이블 이름틀리면 505 Error 불변임  -->
+			SET 
+				ifmmName = #{ifmmName} <!-- 여기다 여러개 넣으면 여러개 수정 함께 가능 -->
+				,ifmmId = #{ifmmId}
+			WHERE 1=1
+				AND ifmmSeq = #{ifmmSeq}
+	</update>
+	<update id="updateDelete">
+			UPDATE infrMember SET ifmmDelNy = 1 WHERE 1=1 AND ifmmSeq = #{ifmmSeq}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM	infrMember WHERE 1=1 AND ifmmSeq = #{ifmmSeq}
+	</delete>
 	
 </mapper>
