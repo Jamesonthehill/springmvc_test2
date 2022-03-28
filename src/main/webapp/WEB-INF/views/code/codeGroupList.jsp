@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
-
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -10,6 +8,8 @@
 
 <form id="formList" name="formList" method="POST" action="/infra/code/codeGroupList">
 <input type="hidden" id="thisPage" name="thisPage"  value="<c:out value="${vo.thisPage}" default="1"/>">
+<input type="hidden" id="ifcgSeq" name="ifcgSeq">
+
 	<select name="shIfcgDelNy" id="shIfcgDelNy">
 		<option value="">::삭제여부::
 		<option value="1" <c:if test="${vo.shIfcgDelNy eq 1}">selected</c:if>>Y
@@ -34,7 +34,7 @@
 		<c:otherwise>
 			<c:forEach items="${list}" var="item" varStatus="status">
 
-				<c:out value="${item.ifcgSeq}" /> | <a href="/infra/code/codeGroupView?ifcgSeq=<c:out value="${item.ifcgSeq}"/>&shOption=<c:out value="${vo.shOption }"/>&shValue=<c:out value="${vo.shValue }"/>"><c:out value="${item.ifcgName}" /></a> | <c:out value="${item.ifcgNameEng}" /> | <c:out value="${item.ifcgDelNy}" />
+				<c:out value="${item.ifcgSeq}" /> | <a href="/infra/code/codeGroupView?ifcgSeq=<c:out value="${item.ifcgSeq}"/>&thisPage=<c:out value="${vo.thisPage}"/>&shOption=<c:out value="${vo.shOption }"/>&shValue=<c:out value="${vo.shValue }"/>"><c:out value="${item.ifcgName}" /></a> | <c:out value="${item.ifcgNameEng}" /> | <c:out value="${item.ifcgDelNy}" />
 				<br>
 	
 			</c:forEach>
@@ -114,6 +114,11 @@
 			// 그 가져온 객체를 전달한다.
 		};
 	
+			goForm = function(seq){
+				$("#ifcgSeq").val(seq);
+				$("#formList").attr("action", "/infra/code/codeGroupView");
+				$("#formList").submit();
+			}
 
 		
 	
