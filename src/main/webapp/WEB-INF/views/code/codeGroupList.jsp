@@ -24,7 +24,10 @@
 	 <input type="submit" id="btnSubmit" name="search"> 
 	 <input type="submit" id="btnSubmit2" name="search"> 
 	 <br>
+	
+	 <input type="text" id="" name=""> 
 
+	<br>
 	<c:choose>
 		<c:when test="${fn:length(list) eq 0}">
 			<tr>
@@ -34,7 +37,9 @@
 		<c:otherwise>
 			<c:forEach items="${list}" var="item" varStatus="status">
 
-				<c:out value="${item.ifcgSeq}" /> | <a href="/infra/code/codeGroupView?ifcgSeq=<c:out value="${item.ifcgSeq}"/>&thisPage=<c:out value="${vo.thisPage}"/>&shOption=<c:out value="${vo.shOption }"/>&shValue=<c:out value="${vo.shValue }"/>"><c:out value="${item.ifcgName}" /></a> | <c:out value="${item.ifcgNameEng}" /> | <c:out value="${item.ifcgDelNy}" />
+				<c:out value="${item.ifcgSeq}" /> | <a href="/infra/code/codeGroupView?ifcgSeq=<c:out value="${item.ifcgSeq}"/>&thisPage=<c:out value="${vo.thisPage}"/>
+				&shOption=<c:out value="${vo.shOption }"/>&shValue=<c:out value="${vo.shValue }"/>"><c:out value="${item.ifcgName}" /></a> | 
+				<c:out value="${item.ifcgNameEng}" /> | <c:out value="${item.ifcgDelNy}" />
 				<br>
 	
 			</c:forEach>
@@ -83,7 +88,7 @@
 	</c:choose>
 </c:forEach>     
 <c:if test="${vo.endPage ne vo.totalPages}">                
-                <li class="page-item"><a class="page-link" href="javascript:goList(<c:out value='${vo.endPage -1}'/>);">Next</a></li>
+                <li class="page-item"><a class="page-link" href="javascript:goList(<c:out value='${vo.endPage +1}'/>);">Next</a></li>
 </c:if> 
 
   </ul>
@@ -91,13 +96,14 @@
 <a href="http://localhost:8080/infra/code/codeGroupForm?thisPage=<c:out value="${vo.thisPage}"/>&shOption=<c:out value="${vo.shOption}"/>&shValue=<c:out value="${vo.shValue}"/>">등록</a>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- <script src="/infra/resources/js/validation.js"></script> -->
 <script src="/infra/resources/js/validation.js"></script>
 <script type = "text/javascript">
-
 	$("#btnSubmit").on("click", function() {
 
 		/* if(!checkNull($("#shIfcgName"), $("#shIfcgName").val(), "코드그룹이름을 입력해 주세요!")) return false; */ 
 		if(!checkNull($("#shValue"), $("#shValue").val(), "검색어를 입력해 주세요!")) return false;
+		if(!checkNull($("#shIfcgName"), $("#shIfcgName").val(), "코드이름을 입력해 주세요!")) return false;
 		
 	});	
 		
